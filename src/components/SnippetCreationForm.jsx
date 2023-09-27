@@ -16,7 +16,7 @@ export default function SnippetCreationForm() {
     console.log(titleRef.current.value);
     console.log(contentRef.current.value);
 
-    fetch("http://localhost:9000/snippets", {
+    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SnippetDetail from "./components/SnippetDetail";
 import "./App.css";
 import Home from "./components/Home";
-
+import Navbar from "./components/Navbar";
+import { ToastContainer } from "react-toastify";
 function App() {
   return (
     <>
+      <ToastContainer />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-
-          <Route path="/:snippet_id" element={<SnippetDetail />} />
+          <Route path="/:snippet_id" element={<Home />} />
         </Routes>{" "}
       </BrowserRouter>{" "}
-      <p className="read-the-docs">i am on every page</p>
     </>
   );
 }

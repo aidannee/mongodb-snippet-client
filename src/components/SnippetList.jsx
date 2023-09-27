@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
 import SnippetListItem from "./SnippetListItem";
+import { snippetContext } from "../contexts/SnippetContext";
 export default function SnippetList() {
-  const [snippets, setSnippets] = useState([]);
+  const { snippetList } = useContext(snippetContext);
+  const [snippets, setSnippets] = snippetList;
+
   useEffect(() => {
-    fetch("http://localhost:9000/snippets")
+    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets")
       .then((res) => res.json())
       .then((data) => setSnippets(data));
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div className="flex flex-col h-[60vh] w-[210px] rounded-lg bg-green-100">
       {snippets.map((snippet) => (
         <SnippetListItem snippet={snippet} key={snippet.shortId} />
       ))}
