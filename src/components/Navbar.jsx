@@ -13,7 +13,7 @@ export default function Navbar() {
   const [snippet, setSnippet] = editor;
 
   const sendDeleteSnippetRequest = () => {
-    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets" + "/snippet_id", {
+    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets/" + snippet.shortId, {
       method: "DELETE",
     }).then((httpResponse) => {
       if (httpResponse.ok) {
@@ -26,7 +26,7 @@ export default function Navbar() {
     });
   };
   const sendUpdateSnippetRequest = () => {
-    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets" + "/snippet_id", {
+    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets/" + snippet.shortId, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export default function Navbar() {
       .then((httpResponse) => httpResponse.json())
       .then((newlyCreatedSnippet) => {
         setSnippet(newlyCreatedSnippet);
-        history("/" + newlyCreatedSnippet.shortId);
+        history("/" + newlyCreatedSnippet.snippet.shortId);
         notify("Snippet created");
       });
   };
