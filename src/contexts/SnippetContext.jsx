@@ -1,11 +1,13 @@
 import { createContext, useState } from "react";
-export const snippetContext = createContext(null);
+import { AVAILABLE_LANGUAGES } from "../enums/editor";
+export const SnippetContext = createContext(null);
 
 export const SnippetProvider = ({ children }) => {
   // this is for the editor and nav bar
   const [snippet, setSnippet] = useState({
     title: "",
     content: "",
+    language: AVAILABLE_LANGUAGES.javascript,
   });
   //   this is for the list component
   const [snippets, setSnippets] = useState([]);
@@ -28,13 +30,13 @@ export const SnippetProvider = ({ children }) => {
   };
 
   return (
-    <snippetContext.Provider
+    <SnippetContext.Provider
       value={{
         editor: [snippet, setSnippet],
         snippetList: [organisedSnippets(), setSnippets],
       }}
     >
       {children}
-    </snippetContext.Provider>
+    </SnippetContext.Provider>
   );
 };

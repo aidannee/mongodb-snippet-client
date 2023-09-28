@@ -1,15 +1,17 @@
 import { useContext } from "react";
-import { snippetContext } from "../contexts/SnippetContext";
+import { SnippetContext } from "../contexts/SnippetContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import { AVAILABLE_LANGUAGES } from "../enums/editor";
+import { ApplicationSettingsContext } from "../contexts/ApplicationSettingsContext";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Navbar() {
   const history = useNavigate();
 
   const notify = (msg) => toast(msg);
-  const { editor } = useContext(snippetContext);
+  const { editor } = useContext(SnippetContext);
+  const { darkMode, toggleDarkMode } = useContext(ApplicationSettingsContext);
   const [snippet, setSnippet] = editor;
 
   const sendDeleteSnippetRequest = () => {
@@ -17,7 +19,11 @@ export default function Navbar() {
       method: "DELETE",
     }).then((httpResponse) => {
       if (httpResponse.ok) {
-        setSnippet({ title: "", content: "" });
+        setSnippet({
+          title: "",
+          content: "",
+          language: AVAILABLE_LANGUAGES.javascript,
+        });
         history("/");
         notify("Snippet deleted");
       } else {
@@ -34,6 +40,7 @@ export default function Navbar() {
       body: JSON.stringify({
         title: snippet.title,
         content: snippet.content,
+        language: snippet.language,
       }),
     })
       .then((httpResponse) => {
@@ -58,6 +65,7 @@ export default function Navbar() {
       body: JSON.stringify({
         title: snippet.title,
         content: snippet.content,
+        language: snippet.language,
       }),
     })
       .then((httpResponse) => httpResponse.json())
@@ -75,7 +83,9 @@ export default function Navbar() {
     <>
       <div
         id="navbar"
-        className="fixed z-50 top-5 right-5 flex gap-4 rounded-lg bg-purple-100 p-2"
+        className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg bg-purple-100 p-2 ${
+          darkMode ? `bg-purple-600` : `bg-white`
+        }`}
       >
         {snippet.createdAt && (
           <p>{new Date(snippet.createdAt).toLocaleDateString()}</p>
@@ -85,14 +95,19 @@ export default function Navbar() {
           value={snippet.title}
           onChange={(e) => setSnippet({ ...snippet, title: e.target.value })}
         ></input>
-        <select className="rounded-lg">
-          <option value="language">please choose</option>
-          <option value="javascript">Javascript</option>
-          <option value="python">Python</option>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-          <option value="sql">SQL</option>
+
+        <select
+          className="rounded-lg"
+          value={snippet.language}
+          onChange={(e) => setSnippet({ ...snippet, language: e.target.value })}
+        >
+          {Object.keys(AVAILABLE_LANGUAGES).map((language) => (
+            <option key={language} value={AVAILABLE_LANGUAGES[language]}>
+              {language}
+            </option>
+          ))}
         </select>
+        <button onClick={toggleDarkMode}>toggle theme</button>
         {snippet.shortId ? (
           <button onClick={sendUpdateSnippetRequest}>SAVE CHANGES</button>
         ) : (

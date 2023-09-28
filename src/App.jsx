@@ -11,8 +11,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/:snippet_id" element={<Home />} />
+          <Route path="/:snippet_id?" element={<Home />} />
         </Routes>{" "}
       </BrowserRouter>{" "}
     </>

@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import CodeBlock from "./CodeBlock";
 import "../App.css";
 import { data } from "autoprefixer";
-import { snippetContext } from "../contexts/SnippetContext";
+import { SnippetContext } from "../contexts/SnippetContext";
 export default function Editor() {
-  const { editor } = useContext(snippetContext);
+  const { editor } = useContext(SnippetContext);
   const [snippet, setSnippet] = editor;
 
   let { snippet_id } = useParams();
