@@ -83,9 +83,7 @@ export default function Navbar() {
     <>
       <div
         id="navbar"
-        className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg bg-purple-100 p-2 ${
-          darkMode ? `bg-purple-600` : `bg-white`
-        }`}
+        className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg bg-purple-100 p-2`}
       >
         {snippet.createdAt && (
           <p>{new Date(snippet.createdAt).toLocaleDateString()}</p>

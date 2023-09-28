@@ -9,6 +9,7 @@ export default function SnippetListItem({ snippet }) {
         >
           {snippet.title ? snippet.title : "Untitled Snippet"}
         </a>{" "}
+        <p>{snippet.language}</p>
         <p>{relativeDate(new Date(snippet.updatedAt))}</p>
       </div>
     </>
