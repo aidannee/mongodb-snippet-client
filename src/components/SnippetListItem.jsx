@@ -2,7 +2,7 @@ import relativeDate from "../utils/relative-date";
 export default function SnippetListItem({ snippet }) {
   return (
     <>
-      <div className=" border-2 border-purple-100 rounded-lg m-2 px-1">
+      <div className=" border-2 border-blue-200 rounded-lg m-2 px-1">
         <a
           href={`/${snippet.shortId}`}
           className="underline text-blue-600 hover:text-blue-900 break-words"

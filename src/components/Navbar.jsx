@@ -83,7 +83,9 @@ export default function Navbar() {
     <>
       <div
         id="navbar"
-        className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg bg-purple-100 p-2`}
+        className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg ${
+          darkMode ? `bg-blue-200` : `bg-blue-800`
+        }  p-2`}
       >
         {snippet.createdAt && (
           <p>{new Date(snippet.createdAt).toLocaleDateString()}</p>
@@ -105,7 +107,7 @@ export default function Navbar() {
             </option>
           ))}
         </select>
-        <button onClick={toggleDarkMode}>toggle theme</button>
+        <button onClick={toggleDarkMode}>TOGGLE THEME</button>
         {snippet.shortId ? (
           <button onClick={sendUpdateSnippetRequest}>SAVE CHANGES</button>
         ) : (
