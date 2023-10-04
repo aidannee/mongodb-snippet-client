@@ -38,14 +38,7 @@ export const SnippetProvider = ({ children }) => {
     } else {
       setUnsavedState(false);
     }
-  }, [
-    snippet.title,
-    snippet.content,
-    snippet.language,
-    snippetDIFF.title,
-    snippetDIFF.content,
-    snippetDIFF.language,
-  ]);
+  }, [snippet, snippetDIFF]);
 
   useEffect(() => {
     if (snippet_id) {

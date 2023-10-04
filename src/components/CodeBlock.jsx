@@ -47,15 +47,19 @@ export default function CodeBlock({ code, handleEdit }) {
     handleEdit(value);
   };
   return (
-    <CodeMirror
-      height="100%"
-      id="cm"
-      className="h-screen"
-      linewrapping="true"
-      value={code}
-      theme={darkMode ? githubDark : githubLight}
-      extensions={extensions}
-      onChange={onChange}
-    />
+    <div
+      className={`h-screen pt-20 ${darkMode ? `bg-[#0D1117]` : `bg-white`} `}
+    >
+      <CodeMirror
+        height="100%"
+        id="cm"
+        className="h-screen"
+        linewrapping="true"
+        value={code}
+        theme={darkMode ? githubDark : githubLight}
+        extensions={extensions}
+        onChange={onChange}
+      />{" "}
+    </div>
   );
 }

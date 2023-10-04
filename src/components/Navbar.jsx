@@ -37,11 +37,11 @@ export default function Navbar() {
     <>
       <div
         id="navbar"
-        className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg ${
+        className={`fixed z-50 top-1 right-5 flex gap-4 rounded-lg ${
           darkMode ? `bg-blue-200` : `bg-blue-800 text-white`
         }  p-2`}
       >
-        <span>
+        <span className=" text-red-500">
           {unsavedState && (
             <span>
               You have unsaved changes.{" "}

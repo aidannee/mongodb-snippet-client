@@ -10,7 +10,7 @@ export default function SnippetList() {
   const { darkMode, toggleDarkMode } = useContext(ApplicationSettingsContext);
   return (
     <div
-      className={`flex flex-col h-[60vh] w-[210px] rounded-lg ${
+      className={`flex flex-col  max-h-screen w-[210px] rounded-lg ${
         darkMode ? `bg-green-200` : `bg-green-800 text-white`
       } overflow-hidden hover:overflow-y-scroll`}
     >
