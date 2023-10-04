@@ -1,103 +1,70 @@
 import { useContext } from "react";
 import { SnippetContext } from "../contexts/SnippetContext";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { AVAILABLE_LANGUAGES } from "../enums/editor";
 import { ApplicationSettingsContext } from "../contexts/ApplicationSettingsContext";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Navbar() {
-  const history = useNavigate();
-
+  const history = (path) => window.history.pushState({}, "", path);
   const notify = (msg) => toast(msg);
-  const { editor } = useContext(SnippetContext);
+  const {
+    editor,
+    unsavedState,
+    sendCreateSnippetRequest,
+    sendDeleteSnippetRequest,
+    sendUpdateSnippetRequest,
+    resetFields,
+  } = useContext(SnippetContext);
   const { darkMode, toggleDarkMode } = useContext(ApplicationSettingsContext);
   const [snippet, setSnippet] = editor;
 
-  const sendDeleteSnippetRequest = () => {
-    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets/" + snippet.shortId, {
-      method: "DELETE",
-    }).then((httpResponse) => {
-      if (httpResponse.ok) {
-        setSnippet({
-          title: "",
-          content: "",
-          language: AVAILABLE_LANGUAGES.javascript,
-        });
-        history("/");
-        notify("Snippet deleted");
-      } else {
-        notify("Something went wrong");
-      }
-    });
-  };
-  const sendUpdateSnippetRequest = () => {
-    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets/" + snippet.shortId, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: snippet.title,
-        content: snippet.content,
-        language: snippet.language,
-      }),
-    })
-      .then((httpResponse) => {
-        if (httpResponse.ok) {
-          notify("Snippet updated");
-        } else {
-          notify("Changes not saved");
-        }
-        return httpResponse.json();
-      })
-      .then((updatedSnippet) => {
-        setSnippet(updatedSnippet);
-      });
-  };
-  const sendCreateSnippetRequest = (e) => {
-    e.preventDefault();
-    fetch(import.meta.env.VITE_SNIPPET_API + "/snippets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: snippet.title,
-        content: snippet.content,
-        language: snippet.language,
-      }),
-    })
-      .then((httpResponse) => httpResponse.json())
-      .then((newlyCreatedSnippet) => {
-        setSnippet(newlyCreatedSnippet);
-        history("/" + newlyCreatedSnippet.snippet.shortId);
-        notify("Snippet created");
-      });
-  };
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     notify("Copied to clipboard");
+  };
+
+  const handleSwitchToNewSnippet = () => {
+    if (unsavedState) {
+      const result = window.confirm("You have unsaved changes. Continue?");
+      if (!result) {
+        return;
+      }
+    }
+    resetFields();
   };
   return (
     <>
       <div
         id="navbar"
         className={`fixed z-50 top-5 right-5 flex gap-4 rounded-lg ${
-          darkMode ? `bg-blue-200` : `bg-blue-800`
+          darkMode ? `bg-blue-200` : `bg-blue-800 text-white`
         }  p-2`}
       >
+        <span>
+          {unsavedState && (
+            <span>
+              You have unsaved changes.{" "}
+              {snippet.updatedAt && (
+                <span>
+                  (last saved at{" "}
+                  {new Date(snippet.updatedAt).toLocaleDateString()})
+                </span>
+              )}{" "}
+            </span>
+          )}
+        </span>
         {snippet.createdAt && (
           <p>{new Date(snippet.createdAt).toLocaleDateString()}</p>
         )}
         <input
-          className="rounded-lg"
+          className="rounded-lg text-black"
           value={snippet.title}
           onChange={(e) => setSnippet({ ...snippet, title: e.target.value })}
         ></input>
 
         <select
-          className="rounded-lg"
+          className="rounded-lg text-black"
           value={snippet.language}
           onChange={(e) => setSnippet({ ...snippet, language: e.target.value })}
         >
@@ -116,6 +83,9 @@ export default function Navbar() {
         {snippet.shortId && <button onClick={copyLink}>COPY LINK</button>}
         {snippet.shortId && (
           <button onClick={sendDeleteSnippetRequest}>DELETE</button>
+        )}
+        {snippet.shortId && (
+          <button onClick={handleSwitchToNewSnippet}>CREATE NEW SNIPPET</button>
         )}
       </div>
     </>
